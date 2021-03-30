@@ -25,11 +25,11 @@ int main()
     scanf("%d %d", &row, &col);
     int** matrix_a = create_matrix(row, col);
     int** matrix_b = create_matrix(row, col);
-    int** matrix_a_t = create_matrix(col, row);
+    int** matrix_a_t = create_matrix(col, row); // row x col 행렬 3개 생성
 
     printf("Matrix Created.\n");
 
-    if (matrix_a == NULL || matrix_b == NULL) {return -1;}
+    if (matrix_a == NULL || matrix_b == NULL) {return -1;} //비정상종ㄹㅛ
 
     do{
         printf("----------------------------------------------------------------\n");
@@ -48,46 +48,46 @@ int main()
         case 'z': case 'Z':
             printf("Matrix Initialized\n");
             fill_data(matrix_a, row, col);
-            fill_data(matrix_b, row, col);
+            fill_data(matrix_b, row, col); //a, b 행렬을 0 ~ 19 무작위 수로 채움
             break;
         case 'p': case 'P':
             printf("Print matrix\n");
             printf("matrix_a\n");
             print_matrix(matrix_a, row, col);
             printf("matrix_b\n");
-            print_matrix(matrix_b, row, col);
+            print_matrix(matrix_b, row, col); // 행렬 a, b를 출력
             break;
         case 'a': case 'A':
             printf("Add two matrices\n");
-            addition_matrix(matrix_a, matrix_b, row, col);
+            addition_matrix(matrix_a, matrix_b, row, col); // 행렬  a와 b를 더함
             break;
         case 's': case 'S':
             printf("Subtract two matrices \n");
-            subtraction_matrix(matrix_a, matrix_b, row, col);
+            subtraction_matrix(matrix_a, matrix_b, row, col); // 행렬 a에서 b를 뺌
             break;
         case 't': case 'T':
             printf("Transpose matrix_a \n");
             printf("matrix_a\n");
-            transpose_matrix(matrix_a, matrix_a_t, col, row);
+            transpose_matrix(matrix_a, matrix_a_t, col, row); // 행렬 a의 전치행렬 matrix_a_t를 구하고 출력
             print_matrix(matrix_a_t, col, row);
             break;
         case 'm': case 'M':
             printf("Multiply matrix_a with transposed matrix_a \n");
             transpose_matrix(matrix_a, matrix_a_t, col, row);
-            multiply_matrix(matrix_a, matrix_a_t, row, col);
+            multiply_matrix(matrix_a, matrix_a_t, row, col); // 행렬 matrix_a와 matrix_a_t를 곱함
             break;
         case 'q': case 'Q':
             printf("Free all matrices..\n");
             free_matrix(matrix_a_t, col, row);
             free_matrix(matrix_a, row, col);
-            free_matrix(matrix_b, row, col);
+            free_matrix(matrix_b, row, col); //동적할당 해제
             break;
         default:
             printf("\n       >>>>>   Concentration!!   <<<<<     \n");
             break;
         }
 
-    }while(command != 'q' && command != 'Q');
+    }while(command != 'q' && command != 'Q'); //q를 눌러 종료할때까지 메뉴 출력 > 동작수행 계속 반복
 
     return 1;
 }
@@ -131,8 +131,7 @@ int free_matrix(int** matrix, int row, int col)
 /* assign random values to the given matrix */
 int fill_data(int** matrix, int row, int col)
 {
-    for(int i = 0; i < row; i++){   
-        srand(time(NULL));                     //행
+    for(int i = 0; i < row; i++){              //행
         for(int j = 0; j < col; j++){          //열
             srand(time(NULL)); 
             matrix [i][j] = rand()%19;         //19까지의 난수 생성 후 대입
@@ -148,7 +147,7 @@ int addition_matrix(int** matrix_a, int** matrix_b, int row, int col)
     int **matrix_sum = (int**)malloc(sizeof(int*)*row);
     for(int i = 0; i<row; i++){
         matrix_sum[i] = (int*)malloc(sizeof(int)*col);
-    }//행렬의 합을 저장할 또 하나의 행렬 생성
+    }//행렬의 합을 저장할 행렬 matrix_sum 생성
 
     for(int i =0; i<row; i++){                                  //행
         for(int j=0; j<col; j++){                               //열
@@ -178,14 +177,15 @@ int subtraction_matrix(int** matrix_a, int** matrix_b, int row, int col)
 /* transpose the matrix to matrix_t */
 int transpose_matrix(int** matrix, int** matrix_t, int row, int col)
 {
-    int** matrix_a_t = (int**)malloc(sizeof(int*) * row);
+int** matrix_t = (int**)malloc(sizeof(int*) * row);
     for (int i = 0; i < row; i++)
-        matrix_a_t[i] = (int*)malloc(sizeof(int) * col); //전치행렬 저장할 배열 생성
+        matrix_t[i] = (int*)malloc(sizeof(int) * col); //전치행렬 저장할 배열 생성
 
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++)
-            matrix_a_t[i][j] = matrix[j][i];
+            matrix_t[i][j] = matrix[j][i];             //i, j 뒤바꾸면 전치행렬 완성
     }
+    return matrix_t;
 }
 
 /* matrix_axt - matrix_a x matrix_t */
@@ -205,5 +205,8 @@ int multiply_matrix(int** matrix_a, int** matrix_t, int row, int col)
             matrix_axt[i][j] = result; //값 대입
         }
     }
+
+    return matrix_axt;
+
 }
 
